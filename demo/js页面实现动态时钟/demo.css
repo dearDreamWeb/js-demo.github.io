@@ -1,0 +1,39 @@
+﻿*{
+    margin: 0;
+    padding:0;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+    background-color:#120a31;
+}
+.wrapper{
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+.wrapper .column,
+.wrapper .colu{
+    display: inline-block;
+    color:#fff;
+    font-size: 86px;
+    line-height: 86px;
+    font-weight: 300;
+    vertical-align: top;
+        /* ***********    calc是css3的运算符号     vh 是将屏幕的高度等分成一百份 ************ */
+    transform:translateY(calc(50vh - 43px));
+}
+.wrapper .column{
+    transition:all 300ms ease-in;
+}
+.close{
+    opacity: .65;
+}
+.far{
+    opacity: .35;
+}
+.now,.wrapper .colu{
+    opacity: 1;
+    text-shadow: 2px 2px 13px #70eadc;
+}

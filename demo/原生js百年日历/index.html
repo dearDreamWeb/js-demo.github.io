@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .calendar-wrapper {
+            display: grid;
+            grid-row-gap: 30px;
+            width: 500px;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background: #008c8c;
+            border-radius: 10px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .calendar-wrapper .calendar-header .btn {
+            padding: 2px 5px;
+            color: #fff;
+            background-color: #2588d6;
+            border: 1px solid #4067b7;
+            outline: none;
+        }
+
+        .calendar-wrapper .calendar-week {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+        }
+
+        .calendar-wrapper .calendar-content {
+            display: grid;
+            grid-row-gap: 10px;
+            grid-template-columns: repeat(7, 1fr);
+        }
+        .calendar-wrapper .calendar-content .today {
+            margin: 0 auto;
+            width: 22px;
+            height: 22px;
+            background: #fff;
+            color: #000;
+            border-radius: 50%;
+        }
+        .calendar-wrapper .calendar-content .lastMonth{
+            color: #ccc;
+        }
+    </style>
+    <title>百年日历</title>
+</head>
+
+<body>
+    <div class="calendar-wrapper">
+        <div class="calendar-header">
+            <select class="year"></select>年
+
+            <select class="month"></select>月
+
+            <input type="button" value="今天" class="btn">
+        </div>
+        <div class="calendar-week">
+            <span>一</span>
+            <span>二</span>
+            <span>三</span>
+            <span>四</span>
+            <span>五</span>
+            <span>六</span>
+            <span>日</span>
+        </div>
+        <div class="calendar-content"></div>
+    </div>
+    <script src="./index.js"></script>
+</body>
+
+</html>

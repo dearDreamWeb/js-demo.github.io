@@ -1,0 +1,7 @@
+﻿在调用body时应该用$("body") 
+eg：
+	$("<div></div>").appendTo($("body"));
+
+在调用document时应该用$(document) 
+eg：
+$(document).bind("click",function(){},false)

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jq躲避怪物</title>
+    <link rel="stylesheet" href="./bootstrap.min.css">
+    <link rel="stylesheet" href="./demo.css">
+</head>
+
+<body>
+    <div class="options">
+        <ul id='ty'>
+            <li class='row'>
+                <label for="heroSize">英雄大小:1~5</label>
+                <input type="text" name="heroSize" id="heroSize" class="form-control" value='3'>
+            </li>
+            <li class='row'>
+                <label for="mosterSize">怪物大小:1~5</label>
+                <input type="text" name="mosterSize" id="mosterSize" class="form-control" value='3'>
+            </li>
+            <li class='row'>
+                <label for="heroSpeed">英雄速度:1~10</label>
+                <input type="text" name="heroSpeed" id="heroSpeed" class="form-control" value='3'>
+            </li>
+            <li class='row'>
+                <label for="minSpeed">怪物最小速度:1~10</label>
+                <input type="text" name="minSpeed" id="minSpeed" class="form-control" value='2'>
+            </li>
+            <li class='row'>
+                <label for="maxSpeed">怪物最大速度:1~10</label>
+                <input type="text" name="maxSpeed" id="maxSpeed" class="form-control" value='5'>
+            </li>
+            <li class='row'>
+                <label for="time">生成怪物时间间隔:1~10</label>
+                <input type="text" name="time" id="time" class="form-control" value='1'>
+            </li>
+            <li class='row'>
+                <label for="error">怪物和英雄碰撞误差:1~99</label>
+                <input type="text" name="error" id="error" class="form-control" value='30'>
+            </li>
+            <li class='row'>
+                <label for="count">怪物总数:1~9</label>
+                <input type="text" name="count" id="count" class="form-control" value='5'>
+            </li>
+            <li class='row'>
+                <button type="submit" class="btn btn-primary" id="start">开始游戏</button>
+            </li>
+        </ul>
+    </div>
+    <div class="wrapper">
+        <div id="gameTime"></div>
+        <div class="tips">请使用键盘的上下左右键来移动角色躲避怪物</div>
+    </div>
+    <script src="./jquery-1.11.3.min.js"></script>
+    <script src="./demo.js"></script>
+</body>
+
+</html>

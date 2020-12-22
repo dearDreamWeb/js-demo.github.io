@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <style>
+	*{
+		margin:0;
+		padding:0;
+	}
+	
+	div{
+		display:inline-block;
+		width:300px;
+		height:300px;
+		overflow:hidden;
+	}
+	.left{
+		
+		position:relative;
+		margin:200px 100px 0 300px;
+		box-shadow: 5px 5px 2px #000;
+	}
+	.left img{
+		width:100%;
+		height:100%;
+	}
+	.left .box{
+		display:none;
+		position:absolute;
+		left:0;
+		top:0;
+		width:100px;
+		height:100px;
+		background:rgba(0,0,0,0.2);
+		cursor:move;
+	}
+	.right{
+		position:relative;
+		display:none;
+	}
+	.right img{
+		position:absolute;
+		width:300%;
+		height:300%;
+	}
+  </style>
+ </head>
+ <body>
+	<div class = "left" id = "left">
+		
+		<img src = 'aaa.jpg'>
+		<div class = "box" id = "box"></div>
+
+		
+	</div>
+	<div class = "right" id = "right">
+		
+		<img src = 'aaa.jpg'>
+
+  </div>
+  <script>
+	var lefta = document.getElementById('left');
+	var righta = document.getElementById('right');
+	var boxa = document.getElementById('box');
+	var ringm = right.getElementsByTagName('img')[0];
+	function getPosition(e){
+		var e = e || window.event;
+		var top = e.clientY - lefta.offsetTop - boxa.offsetHeight /2;
+		var left = e.clientX - lefta.offsetLeft - boxa.offsetWidth /2;
+		var maxtop = lefta.offsetHeight - boxa.offsetHeight;
+		var maxleft = lefta.offsetWidth - boxa.offsetWidth;
+		var minleft = 0;
+		var mintop = 0;
+		var mvtop;
+		var mvleft;
+		if(top > maxtop){
+			
+			boxa.style.top = maxtop + 'px';
+			mvtop = maxtop;
+		}else if(top < mintop){
+			
+			boxa.style.top = mintop + 'px';
+			mvtop = mintop;
+		}else{
+			
+			boxa.style.top = top + 'px';
+			mvtop = top;
+		}
+		if(left > maxleft){
+			
+			boxa.style.left = maxleft + 'px';
+			mvleft = maxleft;
+		}else if(left < minleft){
+			
+			boxa.style.left = minleft + 'px';
+			mvleft = minleft;
+		}else{
+			
+			boxa.style.left = left + 'px';;
+			mvleft = left;
+		}
+		ringm.style.top = -mvtop * 3 + 'px';
+		ringm.style.left = -mvleft * 3 + 'px';
+	}
+	lefta.onmousemove = function(e){
+		var e = e || window.event;
+		boxa.style.display = 'inline-block';
+		getPosition(e);
+		
+		righta.style.display = 'inline-block';
+	}
+	lefta.onmouseleave = function(e){
+		boxa.style.display = 'none';
+		righta.style.display = 'none';
+	}
+  </script>
+ </body>
+</html>

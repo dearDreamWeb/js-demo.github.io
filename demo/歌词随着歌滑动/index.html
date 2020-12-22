@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>歌词随时间滚动</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/demo.css">
+</head>
+<body>
+    <div id="wrapper" class="row col-md-4 col-md-offset-4">
+        <audio id="music" src="./goodgoodsaybye.mp3" controls>您的浏览器不支持 audio 标签。</audio>
+        <div id="song">
+            <ul></ul>
+        </div>
+        
+    </div>
+</body>
+<script src="./js/jquery-1.11.3.js"></script>
+<script src="./js/demo.js"></script>
+<script>
+    let music = $('#music');
+    console.log(music[0].currentTime)
+</script>
+</html>

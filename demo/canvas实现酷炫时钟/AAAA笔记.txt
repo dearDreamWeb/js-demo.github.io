@@ -1,0 +1,35 @@
+﻿bind（）方法
+
+
+setTimeout很容易把 this 指向 window，当然，setInterval 也是一样。
+当使用对象的方法时，需要 this 引用对象，你可能需要显式地把 this 绑定到回调函数以便继续使用对象。
+
+var canvas = {
+  render: function() {
+    this.update();
+    this.draw();
+  },
+
+  update: function() {
+    // ...
+  },
+
+  draw: function() {
+    // ...
+  }
+};
+
+window.setInterval(canvas.render, 1000 / 60);
+
+用 canvas 写特效或者做游戏时经常会碰到类似的问题。
+上面的代码是有问题的，render 方法中的 this 其实被指向了 window！
+我们可以用 bind， 显式地把 this 绑定到回调函数以便继续使用该对象。
+
+类似的情况还有 dom 的事件监听，一不小心可能 this 就被指向了 dom 元素。
+
+
+列如绑定click ，mousedown等事件，也可以用bind（）
+
+eg：$('div').on('click',function(){
+
+}.bind(this))

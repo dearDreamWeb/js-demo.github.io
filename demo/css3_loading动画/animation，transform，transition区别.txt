@@ -1,0 +1,12 @@
+﻿transform和transition的组合用法相当于animation的简装版
+
+这次transform涉及到了translate和rotate的属性
+	translate是在三维上移动用的，eg：transform：translateX(10px)：沿x轴向右移动10px，也可以说负值；
+	rotate是在三维上旋转用的，eg：transform：rotateX(90deg):在x轴上进行顺时针90度；
+transition ：是为了控制transform做出的效果进行的时间周期，eg：transition：1s  代表动画进行一秒
+	transition-delay：2s；代表动画延迟2秒进行。
+
+animation-delay：2s 代表动画延迟2秒.
+
+
+想看详细的介绍去one note吧

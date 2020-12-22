@@ -1,0 +1,36 @@
+﻿*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background:radial-gradient(circle,#414040,#252525,#111111);
+}
+#wrapp{
+    width: 100%;
+    height: 100%;
+    position: relative;
+    text-align: center;
+}
+/* #wrapp #content{
+    width: 400px;
+    height: 400px;
+} */
+#content{
+    /* position: absolute; */
+    margin: 50px auto;
+    font-size: 400px;
+    line-height: 400px;
+    color: aqua;
+    text-shadow: 0 0 50px rgb(57, 255, 255);
+}
+#wrapp #bottom{
+    font-size: 30px;
+    color: yellow;
+}
+ /* #content .error{
+    margin: 50px auto;
+    font-size: 400px;
+    line-height: 400px; 
+    text-shadow: 0 0 50px rgb(57, 255, 255);
+    color: red;
+} */

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./demo.css">
+    <title>告白之夜</title>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="top"><span>告白之夜</span></div>
+        <div class="box"></div>
+        <div class="foot"></div>
+        <audio src="./告白气球.mp3" hidden="true" autoplay="true" loop = "true">
+    </div>
+<script src="./jquery-1.11.1.js"></script>
+<script src="./demo.js"></script>
+<script>
+ function play(){
+     let audio = document.querySelector('audio');
+     audio.play();
+ }
+ console.log(`由于浏览器不支持自动播放音乐，只好写了接口了，用play()即可播放`);
+</script>
+</body>
+</html>

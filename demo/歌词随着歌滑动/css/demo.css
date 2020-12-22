@@ -1,0 +1,42 @@
+*{
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background: linear-gradient(#fde3aa,#b4f395);
+}
+#wrapper{
+    margin-top:3rem;
+}
+audio,ul,ul li{
+    width: 100%;
+    font-size: 1.5rem;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+}
+#song{
+    position: relative;
+    margin: 2rem auto;
+    height: 40rem;
+    overflow: hidden;
+}
+#song ul {
+    position: absolute;
+    top:50%;
+    transition: all .5s linear;
+}
+#song ul li{
+    height: 2rem;
+    line-height: 2rem;
+}
+#music:focus{
+    outline: none;
+}
+.active{
+    color: #f40;
+    text-shadow:.1rem .1rem .1rem #59380b;
+}

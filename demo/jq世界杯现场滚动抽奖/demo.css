@@ -1,0 +1,63 @@
+﻿*{
+    margin: 0;
+    padding:0;
+    list-style: none;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+    font-size: 10px;
+    background:url('./img/bg.jpg')  no-repeat;
+    background-size:100% 100%;
+    overflow: hidden;
+}
+.wrapper{
+    margin:8rem auto;
+    width:100rem;
+    height: 80rem;
+}
+.wrapper .head{
+    margin: 0 auto;
+    width: 80rem;
+    height: 6rem;
+    background-color:#fff;
+    box-shadow:0 0 .4rem 0 #000;
+}
+.content{
+    display:flex;
+    margin: 1rem auto;
+    width: 80rem;
+}
+.content .act{
+    margin:3rem 0 0 5rem;
+    width:35rem;
+}
+.content .act p:nth-child(1){
+    font-size: 4rem;
+    color: #ff1100;
+    text-align: center;
+    text-shadow: 0 0 .3rem #910d03;/*     text-shadow 没有模糊距离,只有四个值  ***/
+}
+.content .act p:nth-child(2),
+.content .act p:nth-child(3){
+    margin-top: 3rem;
+    width:35rem;
+    height: 6rem;
+    line-height: 6rem;
+    font-size: 3rem;
+    background:#fff;
+}
+.content .name{
+    width:35rem;
+    height: 45rem;
+    margin:3rem 0 0 5rem;
+    background:#fff;
+}
+.content .name p{
+    text-align: center;
+    font-size: 2rem;
+    color: #ff1100;
+}
+.content .name ul{
+    margin-left: 9rem;
+}

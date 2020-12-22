@@ -1,0 +1,43 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+html,body{
+    font-size: 10px;
+    overflow: hidden;
+}
+#wrapper{
+    margin-top: 1rem;
+    width: 50rem;
+    height: 66.8rem;
+    padding: 0;
+}
+#wrapper #game{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+#game .item{
+    position: absolute;
+    background-size: 100% 100%; 
+}
+#game .wall{
+    background:url('./images/wall.png');
+    background-size: 100% 100%; 
+}
+#game .player{
+    background:url('./images/person.png');
+    background-size: 100% 100%; 
+}
+#game .right{
+    background:url('./images/right.png');
+    background-size: 100% 100%; 
+}
+#game .error{
+    background:url('./images/error.png');
+    background-size: 100% 100%; 
+}
+#game .wait{
+    border: .2rem solid greenyellow;
+    box-sizing: border-box;
+}

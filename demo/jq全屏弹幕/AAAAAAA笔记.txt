@@ -1,0 +1,10 @@
+﻿
+判断输入框里是否都是空格
+
+
+if(/^\s+$/gi.test(document.getElementById('text_id').value)){
+alert('不能全为空格');
+}
+
+
+用到的正则表达式   /^\s+$/gi.test()
