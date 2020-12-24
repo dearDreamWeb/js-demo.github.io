@@ -6,6 +6,7 @@ if (canvas.getContext) {
     let defaultGameData = {
         isEatFood: false, // 是否吃到食物
         isStart: false, // 是否开始
+        eatFoodNum: 0,  // 吃到了多少个食物
         num: 40, // 界面分成多少X多少的格子
         startX: 0, // 食物出现的x点
         startY: 0, // 食物出现的y点
@@ -15,9 +16,9 @@ if (canvas.getContext) {
         isDir: true, // 方向是否刷新
         timer: null, // 定时器
         bgColor: '#8ead8e', // 背景颜色
-        level: 3,         // 游戏难度
+        level: 0,         // 游戏难度
         step: 1,          // 每个食物的分值，根据难度而定
-        obstacleArr: []   // 障碍物坐标
+        obstacleArr: [],   // 障碍物坐标
     };
     let gameData = { ...defaultGameData };
 
@@ -27,7 +28,81 @@ if (canvas.getContext) {
     // 每个单位的宽度和长度
     itemW = cW / gameData.num;
     itemH = cW / gameData.num;
+    let snake;  // 蛇
+
     let footerGoal = document.querySelector('.footer_goal'); // 底部得分情况
+    let menu = document.querySelector('.menu_wrap');  // 菜单
+    let selectEl = document.querySelector('#menu_level_select'); // select选择框
+    let submitBtn = document.querySelector('.submit_btn'); // 开始游戏按钮
+    let bgMusicSwitch = document.querySelector('.bgMusicSwitch');  // 背景音乐开关按钮
+    let goalMusicSwitch = document.querySelector('.goalMusicSwitch');  // 背景音乐开关按钮
+    let gameGoalMusic = document.querySelector('#gameGoal');   // 吃到食物的音效
+    let bgMusic = document.querySelector('#bgAudio');   // 背景音乐
+
+    let bgMusicStatus = true;  // 背景音乐是否打开
+    let gameGoalMusicStatus = true; // 吃到食物音效是否打开
+
+    // 初始化所有音乐
+    function initAllMusic() {
+        if (bgMusicStatus) {
+            bgMusicSwitch.innerText = '背景音乐：开';
+        } else {
+            bgMusicSwitch.innerText = '背景音乐：关';
+        }
+
+        if (gameGoalMusicStatus) {
+            bgMusicSwitch.innerText = '得分音效：开';
+        } else {
+            bgMusicSwitch.innerText = '得分音效：关';
+        }
+
+
+        // 点击背景音乐开关按钮
+        bgMusicSwitch.onclick = () => {
+            let isBgMusic = bgMusicSwitch.getAttribute('data-switch') === 'on'; // 背景音乐是否打开
+            if (isBgMusic) {
+                bgMusicSwitch.setAttribute('data-switch', 'off');
+                bgMusicSwitch.innerText = '背景音乐：关';
+                bgMusic.pause();
+                bgMusicStatus = false;
+            } else {
+                bgMusicSwitch.setAttribute('data-switch', 'on');
+                bgMusicSwitch.innerText = '背景音乐：开';
+                bgMusic.currentTime = 0;
+                bgMusic.play();
+                bgMusicStatus = true;
+            }
+        }
+
+        // 点击吃到食物音效的开关
+        goalMusicSwitch.onclick = () => {
+            let isOn = goalMusicSwitch.getAttribute('data-switch') === 'on';
+            if (isOn) {
+                goalMusicSwitch.setAttribute('data-switch', 'off');
+                goalMusicSwitch.innerText = '得分音效：关';
+                gameGoalMusic.pause();
+                gameGoalMusicStatus = false;
+            } else {
+                goalMusicSwitch.setAttribute('data-switch', 'on');
+                goalMusicSwitch.innerText = '得分音效：开';
+                eatFoodMusic()
+                gameGoalMusicStatus = true;
+            }
+        }
+    }
+    initAllMusic();
+
+
+    // 吃到食物的音效
+    function eatFoodMusic() {
+        let audioTimer;
+        gameGoalMusic.currentTime = 0;
+        gameGoalMusic.play();
+        clearTimeout(audioTimer);
+        audioTimer = setTimeout(() => {
+            gameGoalMusic.pause();
+        }, 1000)
+    }
 
     // 小方块
     class Rect {
@@ -116,8 +191,11 @@ if (canvas.getContext) {
             // 吃到食物了
             if (this.head.x === gameData.startX && this.head.y === gameData.startY) {
                 gameData.isEatFood = true;
+                gameData.eatFoodNum++;
                 gameData.goal += gameData.step;
-                if (gameData.goal % 3 === 0 && gameData.speed > 60) {
+                gameGoalMusicStatus ? eatFoodMusic() : false;
+                // 当吃食物的个数是3的倍数的时候，速度增加
+                if (gameData.eatFoodNum % 3 === 0 && gameData.speed > 60) {
                     gameData.speed -= 10;
                     clearInterval(gameData.timer)
                     gameData.timer = setInterval(animate, gameData.speed);
@@ -149,9 +227,6 @@ if (canvas.getContext) {
             }
         }
     }
-    // 生成蛇
-    let snake = new Snake();
-    snake.sDraw();
 
     // 障碍物
     class ObstacleRect {
@@ -161,9 +236,11 @@ if (canvas.getContext) {
             this.endX = 0;   // 终点x坐标
             this.startY = 0; // y坐标
             this.showX = this.startX; // 障碍物显示的x坐标
+            this.levelName = ''; // 等级对应的难度
             this.rect = new Rect(0, 0, itemW, itemH, '#eee');
             this.showObstactle();
-            document.querySelector('.footer_level').innerText = this.level;
+            // 难度
+            document.querySelector('.footer_level').innerText = this.levelName;
         }
 
         // 显示障碍物
@@ -173,18 +250,22 @@ if (canvas.getContext) {
                 case 0:
                     gameData.obstacleArr = [];
                     gameData.step = 1;
+                    this.levelName = '天堂';
                     break;
                 case 1:
                     this.levelOne();
                     gameData.step = 2;
+                    this.levelName = '普通';
                     break;
                 case 2:
                     this.levelTwo();
                     gameData.step = 3;
+                    this.levelName = '困难';
                     break;
                 case 3:
                     this.levelThree();
                     gameData.step = 4;
+                    this.levelName = '地狱';
                     break;
                 default:
                     gameData.obstacleArr = [];
@@ -261,8 +342,8 @@ if (canvas.getContext) {
             let centerNumber = centerW / itemW;  // 中间层的数量
             let botoomNumber = botoomW / itemW;  // 下边一层的数量
 
-            // 中间层
-            this.startX = cW / 3;
+            // 上一层
+            this.startX = cW / 4 + itemW * 2;
             this.showX = this.startX;
             this.startY = cH / 5 * 2;
             this.showX = this.startX;
@@ -307,7 +388,7 @@ if (canvas.getContext) {
             })
         }
     }
-    new ObstacleRect();
+
 
     // 暂停界面
     class PausePage {
@@ -353,9 +434,6 @@ if (canvas.getContext) {
         }
         randomPosition();
     }
-    newFoodPosition();
-    let food = new Rect(gameData.startX, gameData.startY, itemW, itemH);
-    food.foodDraw();
 
     // 运动
     function animate() {
@@ -380,7 +458,7 @@ if (canvas.getContext) {
 
         }
     }
-    gameData.timer = setInterval(animate, gameData.speed);
+
 
     // 蛇是否撞到了自己的身体或墙壁或者障碍物
     function isSnakeHit() {
@@ -408,37 +486,59 @@ if (canvas.getContext) {
         document.removeEventListener('keydown', keydownMove);
         // 生成弹窗信息
         let newAlert = document.createElement('div');
-        let text = document.createElement('span');          // 得分结果
+        let message = document.createElement('p');
+        let btnWrap = document.createElement('div');        // 按钮的部分
         let reloadBtn = document.createElement('button');  // 重新开始按钮
-        text.innerText = `游戏的得分：${gameData.goal}`;
+        let returnMenu = document.createElement('button'); // 返回菜单按钮
         reloadBtn.innerText = '重新开始';
-        newAlert.className = 'goal';
+        returnMenu.innerText = '返回菜单';
+        message.innerText = `游戏得分：${gameData.goal}`
         reloadBtn.className = 'reloadBtn';
-        newAlert.appendChild(text);
-        newAlert.appendChild(reloadBtn);
+        returnMenu.className = 'returnMenu';
+        newAlert.className = 'goal';
+        btnWrap.appendChild(reloadBtn);
+        btnWrap.appendChild(returnMenu);
+        newAlert.appendChild(message);
+        newAlert.appendChild(btnWrap);
         document.querySelector('.canvas_wrap').appendChild(newAlert);
+
+        // 点击返回菜单
+        returnMenu.onclick = () => {
+            menu.style.display = 'block';
+            document.querySelector('.canvas_wrap').removeChild(newAlert);
+        }
+
         // 点击重新开始按钮，重新开始游戏
         reloadBtn.onclick = () => {
-            clearInterval(gameData.timer);
-            gameData = { ...defaultGameData };  // 数据初始化
             document.querySelector('.canvas_wrap').removeChild(newAlert);
-            ctx.clearRect(0, 0, cW, cH);
-            new ObstacleRect();
-            snake = new Snake();
-            snake.sDraw();
-            document.addEventListener('keydown', keydownMove);
-            gameData.timer = setInterval(animate, gameData.speed);
-            footerGoal.innerText = gameData.goal;
-            let food = new Rect(gameData.startX, gameData.startY, itemW, itemH, '#f1939c');
-            food.foodDraw();
-        }
+            reloadGame({ ...defaultGameData, level: gameData.level });
+        };
     }
 
-    // 添加键盘事件
-    document.addEventListener('keydown', keydownMove);
+    // 重新加载游戏
+    function reloadGame(newGameData) {
+        clearInterval(gameData.timer);
+        gameData = newGameData;  // 数据初始化
+        ctx.clearRect(0, 0, cW, cH);
+        // 生成障碍物
+        new ObstacleRect();
+        // 生成蛇
+        snake = new Snake();
+        snake.sDraw();
+        // 生成食物的坐标
+        newFoodPosition();
+        // 添加键盘事件
+        document.addEventListener('keydown', keydownMove);
+        // 启动定时器
+        gameData.timer = setInterval(animate, gameData.speed);
+        footerGoal.innerText = gameData.goal;
+        let food = new Rect(gameData.startX, gameData.startY, itemW, itemH, '#f1939c');
+        food.foodDraw();
+    }
+
+
     // 通过监听键盘事件给出方向
     function keydownMove(e) {
-        e.preventDefault();
         if (gameData.isDir) {
             if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
                 gameData.isStart = true;
@@ -478,4 +578,23 @@ if (canvas.getContext) {
         }
     }
 
+    // 点击开始游戏
+    submitBtn.onclick = () => {
+        let level = Number(selectEl.value);
+        menu.style.display = 'none';
+        // 生成蛇
+        snake = new Snake();
+        snake.sDraw();
+        // 生成障碍物，把障碍物的点遍历出来
+        new ObstacleRect();
+        // 生成食物的坐标
+        newFoodPosition();
+        reloadGame({
+            ...defaultGameData,
+            obstacleArr: gameData.obstactleArr,
+            startX: gameData.startX,
+            startY: gameData.startY,
+            level
+        });
+    }
 }

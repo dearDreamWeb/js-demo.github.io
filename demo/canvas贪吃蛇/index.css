@@ -1,0 +1,177 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: cursive, serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.footer {
+  position: absolute;
+  bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 70px;
+  /* left: 35px; */
+  width: 100%;
+  font-size: 2rem;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+.footer .footer_goal,
+.footer .footer_level {
+  color: #fff;
+}
+
+.canvas_wrap {
+  position: relative;
+  padding: 15px 35px 85px 35px;
+  border-radius: 45px;
+  background-color: #8ead8e;
+  box-shadow: 0px 0px 0px 20px #383737;
+}
+
+/* 菜单难度选择 */
+.menu_wrap {
+  display: block;
+}
+
+.menu_level {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 35px 85px 35px;
+  width: 100%;
+  height: 100%;
+  border-radius: 45px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #8ead8e;
+  box-shadow: 0px 0px 0px 20px #383737;
+}
+
+.menu_level .menu_level_header {
+  margin-bottom: 2rem;
+  font-size: 3rem;
+  text-shadow: 0 0 4px #4c4c4c;
+}
+
+.menu_level #menu_level_select {
+  padding: 1rem 2rem;
+  width: 200px;
+  font-size: 2rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 0 3px 1px #b9b9b9;
+}
+
+.menu_level #menu_level_select:hover {
+  transform: scale(1.05);
+}
+
+.menu_level .submit_btn {
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  font-size: 2rem;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: 0 0 4px 1px #cacaca;
+  transition: all 0.5s ease-in-out;
+}
+
+.menu_level .submit_btn:hover {
+  box-shadow: inset 0px 0 20px 2px #ccc;
+  transform: scale(1.1);
+}
+
+.menu_level .music {
+  margin-top: 1rem;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  text-shadow: 0 0 4px #4c4c4c;
+}
+
+.tip {
+  padding-bottom: 10px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #3c3c3c;
+}
+
+.tip .highlight {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.canvas_wrap #canvas {
+  border: 3px solid #000;
+}
+
+/* 结果得分 */
+.goal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 重新开始 和 返回菜单*/
+.goal .reloadBtn,
+.goal .returnMenu {
+  margin: 50px 30px;
+  padding: 8px 12px;
+  font-size: 1.5rem;
+  outline: none;
+  background-color: #505050;
+  color: #fff;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.goal .reloadBtn:hover,
+.goal .returnMenu:hover {
+  background-color: #000;
+}
+
+/* 暂停游戏界面 */
+.pause {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 2rem;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.5);
+}
