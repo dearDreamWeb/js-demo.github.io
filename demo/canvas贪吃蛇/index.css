@@ -62,6 +62,7 @@ body {
   color: #fff;
   background-color: #8ead8e;
   box-shadow: 0px 0px 0px 20px #383737;
+  box-sizing: border-box;
 }
 
 .menu_level .menu_level_header {
