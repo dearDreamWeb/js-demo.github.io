@@ -288,7 +288,7 @@ if (canvas.getContext) {
                         this.showX += itemW;
                     }
                 }
-                this.endX = this.showX - itemW;
+                this.endX = this.showX;
                 gameData.obstacleArr.push({
                     startX: this.startX,
                     endX: this.endX,
