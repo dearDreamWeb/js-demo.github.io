@@ -41,6 +41,13 @@
     <audio src="./audio/background.mp3" loop preload="metadata" id="bgAudio" autoplay></audio>
     <audio src="./audio/goal.mp3.ogg" id="gameGoal"></audio>
     <script src="./index.js"></script>
+    <script>
+        let canvas1 = document.getElementById('canvas');
+        if (window.innerHeight > 720) {
+            canvas1.setAttribute('width',600);
+            canvas1.setAttribute('height',600);
+        }
+    </script>
 </body>
 
 </html>

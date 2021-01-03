@@ -1,4 +1,11 @@
 let canvas = document.querySelector('#canvas');
+
+// 当屏幕高度小于720时，canva的宽度和高度改为600
+if (window.innerHeight > 720) {
+    canvas.setAttribute('width',600);
+    canvas.setAttribute('height',600);
+}
+
 if (canvas.getContext) {
     let ctx = canvas.getContext('2d');
     let cW = canvas.width;
@@ -51,9 +58,9 @@ if (canvas.getContext) {
         }
 
         if (gameGoalMusicStatus) {
-            bgMusicSwitch.innerText = '得分音效：开';
+            goalMusicSwitch.innerText = '得分音效：开';
         } else {
-            bgMusicSwitch.innerText = '得分音效：关';
+            goalMusicSwitch.innerText = '得分音效：关';
         }
 
 
@@ -539,6 +546,7 @@ if (canvas.getContext) {
 
     // 通过监听键盘事件给出方向
     function keydownMove(e) {
+        e.preventDefault();
         if (gameData.isDir) {
             if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40) {
                 gameData.isStart = true;
