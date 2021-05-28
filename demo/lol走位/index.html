@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .cnavas_wrap {
+            position: relative;
+            margin: 100px 200px;
+        }
+
+        #bulletCanvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -1;
+        }
+
+        #bgCanvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: -2;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="cnavas_wrap">
+        <canvas id="canvas" width="1000px" height="600px"></canvas>
+        <canvas id="bulletCanvas" width="1000px" height="600px"></canvas>
+        <!-- 地图 -->
+        <canvas id="bgCanvas" width="1000px" height="600px"></canvas>
+    </div>
+    <script src="./index.js"></script>
+</body>
+
+</html>

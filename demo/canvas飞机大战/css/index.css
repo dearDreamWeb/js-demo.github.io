@@ -1,0 +1,22 @@
+body,
+html {
+  height: 100%;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.container .canvas_wrap {
+  position: relative;
+  width: 480px;
+  height: 700px;
+}
+
+.container .canvas_wrap #heroCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
