@@ -1,5 +1,7 @@
 (function () {
-    // 地图
+    /**
+     * 地图图层
+    */
     const bgCanvas = document.querySelector('#bgCanvas');
     const bgCtx = bgCanvas.getContext('2d');
     let bgCanvasW = bgCanvas.width;
@@ -10,7 +12,9 @@
         bgCtx.drawImage(imgBg, 0, 0, bgCanvasW, bgCanvasH)
     }
 
-    // 主角
+    /**
+     * 主角图层
+    */
     const canvas = document.querySelector('#canvas');
     const ctx = canvas.getContext('2d');
     let canvasW = canvas.width;
@@ -47,11 +51,16 @@
 
     // 主角移动
     function moveMouse(startX, startY, endX, endY) {
+        // 如果点击的位置和主角的位置一样的话，不变
+        if (endX === personX && endY === personY) {
+            return;
+        }
+
+        window.cancelAnimationFrame(timeMove);
         const distanceLen = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
         const allTimes = distanceLen / zSpeed;
         const xSpeed = (endX - startX) / allTimes;
-        const YSpeed = (endY - startY) / allTimes;
-        window.cancelAnimationFrame(timeMove);
+        const ySpeed = (endY - startY) / allTimes;
         // 第一象限
         if (endX <= startX && endY <= startY) {
             quadrant = 1
@@ -69,18 +78,17 @@
         window.requestAnimationFrame(timeMove)
 
         function timeMove() {
-
             if (quadrant === 1) {
                 if ((startX <= endX && startY <= endY)) {
                     window.cancelAnimationFrame(timeMove);
                     return;
                 }
                 if (startX > endX) {
-                    startX += xSpeed;
+                    startX = (startX + xSpeed) <= endX ? endX : (startX + xSpeed);
                     personX = startX;
                 }
                 if (startY > endY) {
-                    startY += YSpeed;
+                    startY = (startY + ySpeed) <= endY ? endY : (startY + ySpeed);
                     personY = startY;
                 }
             } else if (quadrant === 2) {
@@ -89,11 +97,11 @@
                     return;
                 }
                 if (startX < endX) {
-                    startX += xSpeed;
+                    startX = (startX + xSpeed) >= endX ? endX : (startX + xSpeed);
                     personX = startX;
                 }
                 if (startY > endY) {
-                    startY += YSpeed;
+                    startY = (startY + ySpeed) <= endY ? endY : (startY + ySpeed);
                     personY = startY;
                 }
             } else if (quadrant === 3) {
@@ -102,11 +110,11 @@
                     return;
                 }
                 if (startX < endX) {
-                    startX += xSpeed;
+                    startX = (startX + xSpeed) >= endX ? endX : (startX + xSpeed);
                     personX = startX;
                 }
                 if (startY < endY) {
-                    startY += YSpeed;
+                    startY = (startY + ySpeed) >= endY ? endY : (startY + ySpeed);
                     personY = startY;
                 }
             }
@@ -116,21 +124,24 @@
                     return;
                 }
                 if (startX > endX) {
-                    startX += xSpeed;
+                    startX = (startX + xSpeed) <= endX ? endX : (startX + xSpeed);
                     personX = startX;
                 }
                 if (startY < endY) {
-                    startY += YSpeed;
+                    startY = (startY + ySpeed) >= endY ? endY : (startY + ySpeed);
                     personY = startY;
                 }
             }
             ctx.clearRect(0, 0, canvasW, canvasH)
-            ctx.drawImage(imgPerson, startX, startY, 50, 50)
+            ctx.drawImage(imgPerson, startX, startY, personW, personH)
             window.requestAnimationFrame(timeMove)
         }
     }
 
 
+    /**
+     * 子弹图层
+     */
     const bulletCanvas = document.querySelector('#bulletCanvas');
     const bulletCtx = bulletCanvas.getContext('2d');
     let bulletCanvasW = bulletCanvas.width;
