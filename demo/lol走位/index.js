@@ -158,9 +158,8 @@
     let bulletCanvasH = bulletCanvas.height;
     let bulletW = 50;   // 子弹的宽度
     let bulletH = 50;   // 子弹的高度 
-    let minSpeed = 1;
-    let maxSpeed = 2;
-    let bulletArr = [];
+    let minSpeed = 2;
+    let maxSpeed = 3;
     let max = 5;
 
     class Bullet {
@@ -178,7 +177,8 @@
         }
         init() {
             for (let i = 0; i < this.max; i++) {
-                this.newBullet();
+                this.newBullet('top');
+                this.newBullet('left');
             }
             window.cancelAnimationFrame(this.animationBullet)
             const allBulletMove = () => {
@@ -213,31 +213,33 @@
             let bulletCenterY = item.bulletY + this.bulletH / 2;
             let personCenterX = personX + personW / 2;
             let personCenterY = personY + personH / 2;
-            // 碰撞检测
-            if (Math.abs(personCenterX - bulletCenterX) <= (Math.abs(this.bulletW + personW) / 2) && Math.abs(personCenterY - bulletCenterY) <= (Math.abs(this.bulletH + personH) / 2)) {
+            // 碰撞检测，当人物和子弹的中心点的x和y的之前距离大于人物和子弹的宽度或者高度之和的一半说明发送了碰撞    除以的是2.5不是2的原因是为了让视觉看起来重合了
+            if (Math.abs(personCenterX - bulletCenterX) <= (Math.abs(this.bulletW + personW) / 2.5) && Math.abs(personCenterY - bulletCenterY) <= (Math.abs(this.bulletH + personH) / 2.5)) {
                 gameOver = true;
                 return;
             }
         }
         // 子弹移动
         move(bulletId, bulletImg, bulletX, bulletY) {
-            if (bulletX < 0 || bulletX > this.bulletCanvasW || bulletY < -this.bulletH || bulletY > this.bulletCanvasH) {
+            if (bulletX < -this.bulletW || bulletX > this.bulletCanvasW || bulletY < -this.bulletH || bulletY > this.bulletCanvasH) {
+                let newBulletType = this.bulletObj[bulletId].type;
                 delete this.bulletObj[bulletId]
-                this.newBullet()
+                this.newBullet(newBulletType)
                 return;
             }
             bulletCtx.drawImage(bulletImg, bulletX, bulletY, this.bulletW, this.bulletH)
         }
-        // 子弹的属性
-        newBullet() {
-            let bulletY = -this.bulletH;
-            let bulletX = this.randomeNum(this.bulletW, this.bulletCanvasW);
-            let bulletXSpeed = this.randomeNum(-3, this.maxSpeed);
-            let bulletYSpeed = this.randomeNum(this.minSpeed, this.maxSpeed);
+        // 子弹的属性,如果type为top说明子弹是从上面出现的，为left说明是从左边出现的
+        newBullet(type) {
+            let bulletY = type === 'top' ? -this.bulletH : this.randomeNum(this.bulletH, this.bulletCanvasH);
+            let bulletX = type === 'top' ? this.randomeNum(this.bulletW, this.bulletCanvasW) : -this.bulletW;
+            let bulletXSpeed = type === 'top' ? this.randomeNum(-3, this.maxSpeed) : this.randomeNum(this.minSpeed, this.maxSpeed);  // 负值-3 是为了让上面出现的子弹有向左移动的能力
+            let bulletYSpeed = type === 'top' ? this.randomeNum(this.minSpeed, this.maxSpeed) : this.randomeNum(-2, this.maxSpeed);  // 负值-2 是为了让左边出现的子弹有向上移动的能力
             let bulletId = this.randomeNum(new Date().getTime(), new Date().getTime() * 2)
             let bulletImg = new Image();   // 创建img元素
             bulletImg.src = './images/bullet.png'
             this.bulletObj[bulletId] = {
+                type,
                 bulletX,
                 bulletY,
                 bulletXSpeed,
