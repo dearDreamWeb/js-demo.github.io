@@ -14,20 +14,25 @@
 
         .cnavas_wrap {
             position: relative;
-            margin: 0 20px;
+            width: 100vw;
+            height: 100vh;
+            margin: 0 auto;
+        }
+
+        #bulletCanvas,
+        #bgCanvas,
+        #canvas {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
         }
 
         #bulletCanvas {
-            position: absolute;
-            left: 0;
-            top: 0;
             z-index: -1;
         }
 
         #bgCanvas {
-            position: absolute;
-            left: 0;
-            top: 0;
             z-index: -2;
         }
     </style>
