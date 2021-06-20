@@ -27,8 +27,9 @@
     let zSpeed = 3;    // 主角的速度
     let quadrant = 0;   // 角色在第几象限移动
     let animationhandler = null;  // 动画
+    let personImgIndex = 1;  //  角色图片的下坐标
     let imgPerson = new Image();
-    imgPerson.src = './images/person.png';
+    imgPerson.src = './images/person1-1.png';
     imgPerson.onload = () => {
         ctx.drawImage(imgPerson, personX, personY, personW, personH)
     }
@@ -80,6 +81,8 @@
 
         animationhandler = window.requestAnimationFrame(timeMove)
 
+        // 角色动起来节流定时器
+        let timerPersonImage = null;
         // 根据quadrant判断在第几象限移动，在根据第几象限的判定决定是否继续移动
         function timeMove() {
             if (gameOver) {
@@ -143,7 +146,16 @@
             }
 
             ctx.clearRect(0, 0, canvasW, canvasH)
+            // 节流，让人物动起来比较平缓
+            clearTimeout(timerPersonImage)
+            timerPersonImage = setTimeout(() => {
+                ctx.clearRect(0, 0, canvasW, canvasH)
+                personImgIndex = personImgIndex > 7 ? 1 : personImgIndex + 1;
+                imgPerson.src = `./images/person1-${personImgIndex}.png`
+            }, 20)
+
             ctx.drawImage(imgPerson, startX, startY, personW, personH)
+
             animationhandler = window.requestAnimationFrame(timeMove)
         }
     }
@@ -213,8 +225,8 @@
             let bulletCenterY = item.bulletY + this.bulletH / 2;
             let personCenterX = personX + personW / 2;
             let personCenterY = personY + personH / 2;
-            // 碰撞检测，当人物和子弹的中心点的x和y的之前距离大于人物和子弹的宽度或者高度之和的一半说明发送了碰撞    除以的是2.5不是2的原因是为了让视觉看起来重合了
-            if (Math.abs(personCenterX - bulletCenterX) <= (Math.abs(this.bulletW + personW) / 2.5) && Math.abs(personCenterY - bulletCenterY) <= (Math.abs(this.bulletH + personH) / 2.5)) {
+            // 碰撞检测，当人物和子弹的中心点的x和y的之前距离大于人物和子弹的宽度或者高度之和的一半说明发送了碰撞    除以的是4不是2的原因是为了让视觉看起来重合了
+            if (Math.abs(personCenterX - bulletCenterX) <= (Math.abs(this.bulletW + personW) / 4) && Math.abs(personCenterY - bulletCenterY) <= (Math.abs(this.bulletH + personH) / 4)) {
                 gameOver = true;
                 return;
             }
@@ -231,10 +243,20 @@
         }
         // 子弹的属性,如果type为top说明子弹是从上面出现的，为left说明是从左边出现的
         newBullet(type) {
+            let bulletSpeed = this.randomeNum(this.minSpeed, this.maxSpeed);
             let bulletY = type === 'top' ? -this.bulletH : this.randomeNum(this.bulletH, this.bulletCanvasH);
             let bulletX = type === 'top' ? this.randomeNum(this.bulletW, this.bulletCanvasW) : -this.bulletW;
-            let bulletXSpeed = type === 'top' ? this.randomeNum(-3, this.maxSpeed) : this.randomeNum(this.minSpeed, this.maxSpeed);  // 负值-3 是为了让上面出现的子弹有向左移动的能力
-            let bulletYSpeed = type === 'top' ? this.randomeNum(this.minSpeed, this.maxSpeed) : this.randomeNum(-2, this.maxSpeed);  // 负值-2 是为了让左边出现的子弹有向上移动的能力
+            let bulletCenterX = bulletX + this.bulletW / 2;
+            let bulletCenterY = bulletY + this.bulletH / 2;
+            let personCenterX = personX + personW / 2;
+            let personCenterY = personY + personH / 2;
+            // 人物和子弹之间的斜边
+            let hypotenuse = Math.sqrt(Math.pow(personCenterX - bulletCenterX, 2) + Math.pow(personCenterY - bulletCenterY, 2));
+            // 人物和子弹的夹角的角度
+            let angle = Math.asin(Math.abs(personCenterY - bulletCenterY) / hypotenuse) * 180 / Math.PI;
+            let totalTime = hypotenuse / bulletSpeed;
+            let bulletXSpeed = (personCenterX - bulletCenterX) / totalTime;
+            let bulletYSpeed = (personCenterY - bulletCenterY) / totalTime;
             let bulletId = this.randomeNum(new Date().getTime(), new Date().getTime() * 2)
             let bulletImg = new Image();   // 创建img元素
             bulletImg.src = './images/bullet.png'
@@ -246,6 +268,7 @@
                 bulletYSpeed,
                 bulletImg
             }
+
         }
         randomeNum(minNum, maxNum) {
             return Math.random() * (maxNum - minNum) + minNum
