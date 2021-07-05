@@ -27,7 +27,7 @@
         let seconds = (goldNum / 1000).toFixed(1);
         bgCtx.drawImage(imgBg, 0, 0, bgCanvasW, bgCanvasH)
         bgCtx.font = "50px sans-serif"
-        bgCtx.fillStyle = '#f40';
+        bgCtx.fillStyle = '#fff';
         bgCtx.fillText(`${seconds}s`, bgCanvasW / 2 - 75, 50);
     }, 100)
 
@@ -119,7 +119,7 @@
                 window.cancelAnimationFrame(animationHandler);
                 return;
             }
-            
+
             // 触发技能速度加速至3倍
             xSpeed = isJump ? xSpeed * 3 : xSpeed;
             ySpeed = isJump ? ySpeed * 3 : ySpeed;
@@ -278,6 +278,9 @@
         }
         // 子弹的属性,如果type为top说明子弹是从上面出现的，为left说明是从左边出现的
         newBullet(type) {
+            // 随着分数的提升，最大速度和最小速度提升
+            this.minSpeed += Math.ceil(goldNum / 200000);
+            this.maxSpeed += Math.ceil(goldNum / 200000);
             let bulletSpeed = this.randomNum(this.minSpeed, this.maxSpeed);
             let bulletY = type === 'top' ? -this.bulletH : this.randomNum(this.bulletH, this.bulletCanvasH);
             let bulletX = type === 'top' ? this.randomNum(this.bulletW, this.bulletCanvasW) : -this.bulletW;
