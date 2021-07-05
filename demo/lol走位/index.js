@@ -10,7 +10,7 @@
     let imgBg = new Image();
     let goldTimer = null;    // 得分定时器
     let goldNum = 0;  // 得分
-    
+
     imgBg.src = './images/bg.png';
     imgBg.onload = () => {
         bgCtx.drawImage(imgBg, 0, 0, bgCanvasW, bgCanvasH)
@@ -46,6 +46,9 @@
     let quadrant = 0;   // 角色在第几象限移动
     let animationHandler = null;  // 动画
     let personImgIndex = 1;  //  角色图片的下坐标
+    let isJump = false;   // 是否位移
+    let jumpTime = 0;  // 触发位移技能的时间
+    let skillTime = 3000; // 技能冷却时间
     let imgPerson = new Image();
     imgPerson.src = './images/person1-1.png';
     imgPerson.onload = () => {
@@ -70,6 +73,15 @@
         moveMouse(personX, personY, dx - personW / 2, dy - personH / 2)
     }
 
+    // 监听键盘w是否触发技能
+    document.addEventListener('keydown', (e) => {
+        const nowDateTime = new Date().getTime();
+        if (e.keyCode === 87 && (nowDateTime - jumpTime) > skillTime) {
+            jumpTime = nowDateTime;
+            isJump = true;
+        }
+    })
+
     // 主角移动
     function moveMouse(startX, startY, endX, endY) {
 
@@ -81,8 +93,8 @@
 
         const distanceLen = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
         const allTimes = distanceLen / zSpeed;
-        const xSpeed = (endX - startX) / allTimes;
-        const ySpeed = (endY - startY) / allTimes;
+        let xSpeed = (endX - startX) / allTimes;
+        let ySpeed = (endY - startY) / allTimes;
         // 第一象限
         if (endX <= startX && endY <= startY) {
             quadrant = 1
@@ -107,6 +119,10 @@
                 window.cancelAnimationFrame(animationHandler);
                 return;
             }
+            
+            // 触发技能速度加速至3倍
+            xSpeed = isJump ? xSpeed * 3 : xSpeed;
+            ySpeed = isJump ? ySpeed * 3 : ySpeed;
 
             if (quadrant === 1) {
                 if ((startX <= endX && startY <= endY)) {
@@ -173,7 +189,8 @@
             }, 20)
 
             ctx.drawImage(imgPerson, startX, startY, personW, personH)
-
+            // 技能进入冷却
+            isJump = false;
             animationHandler = window.requestAnimationFrame(timeMove)
         }
     }
