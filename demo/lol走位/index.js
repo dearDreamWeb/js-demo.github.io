@@ -3,7 +3,9 @@
     /**
      * 排行榜面板
      */
-    const listBox = document.querySelector('.ranking_list_box');
+    const listBox = document.querySelector('.ranking_list_box');  // 排行榜列表
+    const skillDom = document.querySelector('.skill');   // 技能图标
+    const skillLoading = document.querySelector('.skill_loading');  // 技能冷却显示
     let localData = window.localStorage.getItem('list');
     localData = localData ? JSON.parse(localData) : [];
     appendGold(localData)
@@ -19,6 +21,8 @@
         })
     }
 
+    /***************************************************************************************************************************/
+
     /**
      * 游戏结束面板
      */
@@ -28,6 +32,9 @@
     goldBtn.addEventListener('click', () => {
         window.location.reload()
     })
+
+    /***************************************************************************************************************************/
+
     /**
      * 地图图层
     */
@@ -49,10 +56,11 @@
         // 游戏结束得分计时器停止
         if (gameOver) {
             clearInterval(goldTimer)
+            document.onkeydown = null;
             // 游戏面板展示
             goldBox.style.display = 'flex';
             goldText.innerHTML = `得分：${seconds}s`
-            // 本地排行榜面板
+            // 本地排行榜面板更新
             localData.push(seconds);
             localData.sort((a, b) => {
                 return b - a;
@@ -69,6 +77,8 @@
         bgCtx.fillStyle = '#fff';
         bgCtx.fillText(`${seconds}s`, bgCanvasW / 2 - 75, 50);
     }, 100)
+
+    /***************************************************************************************************************************/
 
     /**
      * 主角图层
@@ -88,6 +98,7 @@
     let isJump = false;   // 是否位移
     let jumpTime = 0;  // 触发位移技能的时间
     let skillTime = 3000; // 技能冷却时间
+    let skillLoadingTime = skillTime;
     let imgPerson = new Image();
     imgPerson.src = './images/person1-1.png';
     imgPerson.onload = () => {
@@ -113,13 +124,32 @@
     }
 
     // 监听键盘w是否触发技能
-    document.addEventListener('keydown', (e) => {
+    let skillTimer = null;
+    document.onkeydown = (e) => {
         const nowDateTime = new Date().getTime();
         if (e.keyCode === 87 && (nowDateTime - jumpTime) > skillTime) {
             jumpTime = nowDateTime;
             isJump = true;
+            // 技能图标进入冷却倒计时
+            skillDom.classList.add('loading');
+            clearInterval(skillTimer)
+            skillLoading.style.display = 'flex';
+            skillTimer = setInterval(() => {
+                // 冷却结束，恢复原来的样子
+                if (skillLoadingTime < 0) {
+                    clearInterval(skillTimer)
+                    skillLoadingTime = skillTime;
+                    skillDom.classList.remove('loading');
+                    skillLoading.style.display = 'none'
+                    return;
+                }
+                skillLoading.innerHTML = `${(skillLoadingTime / 1000).toFixed(1)}s`;
+                skillLoadingTime -= 100;
+
+            }, 100)
         }
-    })
+    }
+
 
     // 主角移动
     function moveMouse(startX, startY, endX, endY) {
@@ -217,7 +247,6 @@
                     personY = startY;
                 }
             }
-            console.log(personX, personY, endX, endY)
             ctx.clearRect(0, 0, canvasW, canvasH)
             // 节流，让人物动起来比较平缓
             clearTimeout(timerPersonImage)
@@ -234,6 +263,7 @@
         }
     }
 
+    /***************************************************************************************************************************/
 
     /**
      * 子弹图层
@@ -301,7 +331,7 @@
             let personCenterY = personY + personH / 2;
             // 碰撞检测，当人物和子弹的中心点的x和y的之前距离大于人物和子弹的宽度或者高度之和的一半说明发送了碰撞    除以的是4不是2的原因是为了让视觉看起来重合了
             if (Math.abs(personCenterX - bulletCenterX) <= (Math.abs(this.bulletW + personW) / 4) && Math.abs(personCenterY - bulletCenterY) <= (Math.abs(this.bulletH + personH) / 4)) {
-                // gameOver = true;
+                gameOver = true;
                 return;
             }
         }
