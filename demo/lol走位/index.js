@@ -8,10 +8,28 @@
     let bgCanvasW = bgCanvas.width;
     let bgCanvasH = bgCanvas.height;
     let imgBg = new Image();
+    let goldTimer = null;    // 得分定时器
+    let goldNum = 0;  // 得分
+    
     imgBg.src = './images/bg.png';
     imgBg.onload = () => {
         bgCtx.drawImage(imgBg, 0, 0, bgCanvasW, bgCanvasH)
     }
+    // 得分定时器启动
+    goldTimer = setInterval(() => {
+        // 游戏结束得分计时器停止
+        if (gameOver) {
+            clearInterval(this.goldTimer)
+            return;
+        }
+        goldNum += 100;
+        bgCtx.clearRect(0, 0, bgCanvasW, bgCanvasH)
+        let seconds = (goldNum / 1000).toFixed(1);
+        bgCtx.drawImage(imgBg, 0, 0, bgCanvasW, bgCanvasH)
+        bgCtx.font = "50px sans-serif"
+        bgCtx.fillStyle = '#f40';
+        bgCtx.fillText(`${seconds}s`, bgCanvasW / 2 - 75, 50);
+    }, 100)
 
     /**
      * 主角图层
@@ -20,13 +38,13 @@
     const ctx = canvas.getContext('2d');
     let canvasW = canvas.width;
     let canvasH = canvas.height;
-    let personW = 80;   // 主角的宽度
-    let personH = 80;   // 主角的高度
+    let personW = 64;   // 主角的宽度
+    let personH = 64;   // 主角的高度
     let personX = canvasW / 2 - personW / 2;  // 主角的X点
     let personY = canvasH / 2 - personH / 2;  // 主角的Y点
     let zSpeed = 3;    // 主角的速度
     let quadrant = 0;   // 角色在第几象限移动
-    let animationhandler = null;  // 动画
+    let animationHandler = null;  // 动画
     let personImgIndex = 1;  //  角色图片的下坐标
     let imgPerson = new Image();
     imgPerson.src = './images/person1-1.png';
@@ -55,7 +73,7 @@
     // 主角移动
     function moveMouse(startX, startY, endX, endY) {
 
-        window.cancelAnimationFrame(animationhandler);
+        window.cancelAnimationFrame(animationHandler);
         // 如果点击的位置和主角的位置一样的话，不变
         if (endX === personX && endY === personY) {
             return;
@@ -79,20 +97,20 @@
             quadrant = 4
         }
 
-        animationhandler = window.requestAnimationFrame(timeMove)
+        animationHandler = window.requestAnimationFrame(timeMove)
 
         // 角色动起来节流定时器
         let timerPersonImage = null;
         // 根据quadrant判断在第几象限移动，在根据第几象限的判定决定是否继续移动
         function timeMove() {
             if (gameOver) {
-                window.cancelAnimationFrame(animationhandler);
+                window.cancelAnimationFrame(animationHandler);
                 return;
             }
 
             if (quadrant === 1) {
                 if ((startX <= endX && startY <= endY)) {
-                    window.cancelAnimationFrame(animationhandler);
+                    window.cancelAnimationFrame(animationHandler);
                     return;
                 }
                 if (startX > endX) {
@@ -105,7 +123,7 @@
                 }
             } else if (quadrant === 2) {
                 if ((startX >= endX && startY <= endY)) {
-                    window.cancelAnimationFrame(animationhandler);
+                    window.cancelAnimationFrame(animationHandler);
                     return;
                 }
                 if (startX < endX) {
@@ -118,7 +136,7 @@
                 }
             } else if (quadrant === 3) {
                 if ((startX >= endX && startY >= endY)) {
-                    window.cancelAnimationFrame(animationhandler);
+                    window.cancelAnimationFrame(animationHandler);
                     return;
                 }
                 if (startX < endX) {
@@ -132,7 +150,7 @@
             }
             else if (quadrant === 4) {
                 if ((startX <= endX && startY >= endY)) {
-                    window.cancelAnimationFrame(animationhandler);
+                    window.cancelAnimationFrame(animationHandler);
                     return;
                 }
                 if (startX > endX) {
@@ -156,7 +174,7 @@
 
             ctx.drawImage(imgPerson, startX, startY, personW, personH)
 
-            animationhandler = window.requestAnimationFrame(timeMove)
+            animationHandler = window.requestAnimationFrame(timeMove)
         }
     }
 
@@ -243,9 +261,9 @@
         }
         // 子弹的属性,如果type为top说明子弹是从上面出现的，为left说明是从左边出现的
         newBullet(type) {
-            let bulletSpeed = this.randomeNum(this.minSpeed, this.maxSpeed);
-            let bulletY = type === 'top' ? -this.bulletH : this.randomeNum(this.bulletH, this.bulletCanvasH);
-            let bulletX = type === 'top' ? this.randomeNum(this.bulletW, this.bulletCanvasW) : -this.bulletW;
+            let bulletSpeed = this.randomNum(this.minSpeed, this.maxSpeed);
+            let bulletY = type === 'top' ? -this.bulletH : this.randomNum(this.bulletH, this.bulletCanvasH);
+            let bulletX = type === 'top' ? this.randomNum(this.bulletW, this.bulletCanvasW) : -this.bulletW;
             let bulletCenterX = bulletX + this.bulletW / 2;
             let bulletCenterY = bulletY + this.bulletH / 2;
             let personCenterX = personX + personW / 2;
@@ -257,7 +275,7 @@
             let totalTime = hypotenuse / bulletSpeed;
             let bulletXSpeed = (personCenterX - bulletCenterX) / totalTime;
             let bulletYSpeed = (personCenterY - bulletCenterY) / totalTime;
-            let bulletId = this.randomeNum(new Date().getTime(), new Date().getTime() * 2)
+            let bulletId = this.randomNum(new Date().getTime(), new Date().getTime() * 2)
             let bulletImg = new Image();   // 创建img元素
             bulletImg.src = './images/bullet.png'
             this.bulletObj[bulletId] = {
@@ -270,7 +288,7 @@
             }
 
         }
-        randomeNum(minNum, maxNum) {
+        randomNum(minNum, maxNum) {
             return Math.random() * (maxNum - minNum) + minNum
         }
     }

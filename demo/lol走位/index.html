@@ -12,7 +12,7 @@
             list-style: none;
         }
 
-        .cnavas_wrap {
+        .canvas_wrap {
             position: relative;
             width: 100vw;
             height: 100vh;
@@ -35,16 +35,34 @@
         #bgCanvas {
             z-index: -2;
         }
+
+        .personImg {
+            position: relative;
+            width: 64px;
+            height: 64px;
+            overflow: hidden;
+        }
+
+        .personImg img {
+            position: absolute;
+            top: 0;
+            left: 64px;
+            width: 100%;
+            height: 100%;
+        }
     </style>
     <title>LOL走位（canvas版）</title>
 </head>
 
 <body>
-    <div class="cnavas_wrap">
+    <div class="canvas_wrap">
         <canvas id="canvas" width="1000" height="600"></canvas>
         <canvas id="bulletCanvas" width="1000" height="600"></canvas>
         <!-- 地图 -->
         <canvas id="bgCanvas" width="1000" height="600"></canvas>
+    </div>
+    <div class="personImg">
+        <img src="./images/person1.png" alt="person1">
     </div>
     <script src="./index.js"></script>
 </body>
