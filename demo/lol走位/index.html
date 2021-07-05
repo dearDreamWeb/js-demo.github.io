@@ -21,7 +21,9 @@
 
         #bulletCanvas,
         #bgCanvas,
-        #canvas {
+        #canvas,
+        .gold_box,
+        .ranking_list {
             position: absolute;
             left: 50%;
             top: 50%;
@@ -50,6 +52,77 @@
             width: 100%;
             height: 100%;
         }
+
+        .gold_box {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 1000px;
+            height: 600px;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: aquamarine;
+        }
+
+        .gold_title {
+            text-align: center;
+            font-size: 52px;
+        }
+
+        .gold_text {
+            font-size: 32px;
+            margin: 32px 0;
+        }
+
+        .gold_btn {
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: #fff;
+            color: #000;
+            cursor: pointer;
+            box-shadow: inset 0 0 5px 1px #7d7e7e;
+        }
+
+        .ranking_list {
+            position: absolute;
+            left: calc((100vw - 1000px) / 2 + 1000px);
+            text-align: center;
+            padding: 20px;
+            width: 200px;
+            height: 600px;
+            background-color: #1e1e1e;
+            transform: translate(10px, -50%);
+            box-sizing: border-box;
+            color: #fff;
+        }
+
+        .ranking_list_box {
+            margin-top: 30px;
+        }
+
+        .ranking_list_box li {
+            margin-top: 16px;
+            font-size: 20px;
+        }
+
+        .ranking_list_box li:first-child {
+            color: #f40;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .ranking_list_box li:nth-of-type(2) {
+            color: rgb(6, 139, 216);
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .ranking_list_box li:nth-of-type(3) {
+            color: rgb(101, 212, 10);
+            font-size: 24px;
+            font-weight: bold;
+        }
     </style>
     <title>LOL走位（canvas版）</title>
 </head>
@@ -60,6 +133,17 @@
         <canvas id="bulletCanvas" width="1000" height="600"></canvas>
         <!-- 地图 -->
         <canvas id="bgCanvas" width="1000" height="600"></canvas>
+        <!-- 游戏结束面板 -->
+        <div class="gold_box">
+            <h1 class="gold_title">游戏结束</h1>
+            <p class="gold_text">得分：40s</p>
+            <div class="gold_btn">再来一局</div>
+        </div>
+        <!-- 游戏排行榜 -->
+        <div class="ranking_list">
+            <h3 class="ranking_title">本地排行榜</h3>
+            <ul class="ranking_list_box"></ul>
+        </div>
     </div>
     <div class="personImg">
         <img src="./images/person1.png" alt="person1">

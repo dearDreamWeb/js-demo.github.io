@@ -1,6 +1,34 @@
 (function () {
     let gameOver = false;
     /**
+     * 排行榜面板
+     */
+    const listBox = document.querySelector('.ranking_list_box');
+    let localData = window.localStorage.getItem('list');
+    localData = localData ? JSON.parse(localData) : [];
+    appendGold(localData)
+    /*
+    * 填充排行榜
+    */
+    function appendGold(arrData) {
+        listBox.innerHTML = '';
+        arrData.forEach((item, index) => {
+            let liDom = document.createElement('li');
+            liDom.innerHTML = `${index + 1}：${item}s`
+            listBox.appendChild(liDom)
+        })
+    }
+
+    /**
+     * 游戏结束面板
+     */
+    const goldBox = document.querySelector('.gold_box');
+    const goldText = document.querySelector('.gold_text');
+    const goldBtn = document.querySelector('.gold_btn');
+    goldBtn.addEventListener('click', () => {
+        window.location.reload()
+    })
+    /**
      * 地图图层
     */
     const bgCanvas = document.querySelector('#bgCanvas');
@@ -17,14 +45,25 @@
     }
     // 得分定时器启动
     goldTimer = setInterval(() => {
+        let seconds = (goldNum / 1000).toFixed(1);
         // 游戏结束得分计时器停止
         if (gameOver) {
-            clearInterval(this.goldTimer)
+            clearInterval(goldTimer)
+            // 游戏面板展示
+            goldBox.style.display = 'flex';
+            goldText.innerHTML = `得分：${seconds}s`
+            // 本地排行榜面板
+            localData.push(seconds);
+            localData.sort((a, b) => {
+                return b - a;
+            })
+            let newData = localData.slice(0, 10)
+            window.localStorage.setItem('list', JSON.stringify(newData))
+            appendGold(newData);
             return;
         }
         goldNum += 100;
         bgCtx.clearRect(0, 0, bgCanvasW, bgCanvasH)
-        let seconds = (goldNum / 1000).toFixed(1);
         bgCtx.drawImage(imgBg, 0, 0, bgCanvasW, bgCanvasH)
         bgCtx.font = "50px sans-serif"
         bgCtx.fillStyle = '#fff';
@@ -178,7 +217,7 @@
                     personY = startY;
                 }
             }
-
+            console.log(personX, personY, endX, endY)
             ctx.clearRect(0, 0, canvasW, canvasH)
             // 节流，让人物动起来比较平缓
             clearTimeout(timerPersonImage)
@@ -262,7 +301,7 @@
             let personCenterY = personY + personH / 2;
             // 碰撞检测，当人物和子弹的中心点的x和y的之前距离大于人物和子弹的宽度或者高度之和的一半说明发送了碰撞    除以的是4不是2的原因是为了让视觉看起来重合了
             if (Math.abs(personCenterX - bulletCenterX) <= (Math.abs(this.bulletW + personW) / 4) && Math.abs(personCenterY - bulletCenterY) <= (Math.abs(this.bulletH + personH) / 4)) {
-                gameOver = true;
+                // gameOver = true;
                 return;
             }
         }
@@ -279,8 +318,9 @@
         // 子弹的属性,如果type为top说明子弹是从上面出现的，为left说明是从左边出现的
         newBullet(type) {
             // 随着分数的提升，最大速度和最小速度提升
-            this.minSpeed += Math.ceil(goldNum / 200000);
-            this.maxSpeed += Math.ceil(goldNum / 200000);
+            this.minSpeed += Math.ceil(goldNum / 200000) * 0.01;
+            this.maxSpeed += Math.ceil(goldNum / 200000) * 0.01;
+
             let bulletSpeed = this.randomNum(this.minSpeed, this.maxSpeed);
             let bulletY = type === 'top' ? -this.bulletH : this.randomNum(this.bulletH, this.bulletCanvasH);
             let bulletX = type === 'top' ? this.randomNum(this.bulletW, this.bulletCanvasW) : -this.bulletW;
@@ -313,7 +353,6 @@
         }
     }
     new Bullet(bulletCanvasW, bulletCanvasH, bulletW, bulletH, minSpeed, maxSpeed, max)
-
 
 
 })()
