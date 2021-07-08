@@ -59,7 +59,10 @@
             document.onkeydown = null;
             // 游戏面板展示
             goldBox.style.display = 'flex';
-            goldText.innerHTML = `得分：${seconds}s`
+            goldText.innerHTML = `得分：${seconds}s`;
+            bgCtx.clearRect(0, 0, bgCanvasW / 2 - 75, 50)
+            bgCtx.drawImage(imgBg, 0, 0, bgCanvasW, bgCanvasH)
+            bgCtx.fillText(`${seconds}s`, bgCanvasW / 2 - 75, 50);
             // 本地排行榜面板更新
             localData.push(seconds);
             localData.sort((a, b) => {
