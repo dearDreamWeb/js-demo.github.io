@@ -4,6 +4,8 @@
     let canvasW = canvas.width;
     let canvasH = canvas.height;
     const distance = 50; // 两个小球连线的距离
+    let mouseX = 0;
+    let mouseY = 0;
 
     // let canvasW = window.innerWidth;
     // let canvasH = window.innerHeight;
@@ -18,6 +20,12 @@
     //     canvas.style.height = canvasH + 'px';
     // }, false)
 
+    canvas.addEventListener('mousemove', (e) => {
+        const { top, left } = canvas.getBoundingClientRect()
+        mouseX = e.clientX - left;
+        mouseY = e.clientY - top;
+    })
+
     /**
      * 小圆点
      * x： x坐标
@@ -30,6 +38,7 @@
             this.x = x;
             this.y = y;
             this.r = r;
+            this.mouse = false;
             this.xSpeed = Math.random() * (maxSpeed - minSpeed + 1) + minSpeed;
             this.ySpeed = Math.random() * (maxSpeed - minSpeed + 1) + minSpeed;
         }
@@ -47,8 +56,32 @@
             if (this.y <= 0 || this.y >= canvasH) {
                 this.ySpeed *= -1;
             }
+
             this.x += this.xSpeed;
             this.y += this.ySpeed;
+            // if (this.mouse) {
+            //     if (Math.abs(this.x - mouseX) >= distance && Math.abs(this.y - mouseY) >= distance) {
+            //         const ratex = Math.abs(distance - Math.abs(this.x - mouseX)) / Math.abs(this.xSpeed);
+            //         if (mouseX > this.x) {
+            //             this.x -= this.xSpeed * ratex
+            //         } else {
+            //             this.x += this.xSpeed * ratex
+            //         }
+            //         this.mouse = false
+ 
+            //         const rate = Math.abs(distance - Math.abs(this.y - mouseY)) / Math.abs(this.ySpeed);
+            //         if (mouseY > this.Y) {
+            //             this.y += this.ySpeed * rate
+            //         } else {
+            //             this.y -= this.ySpeed * rate
+            //         }
+            //         this.mouse = false
+            //     }
+
+            // } else {
+            //     this.x += this.xSpeed;
+            //     this.y += this.ySpeed;
+            // }
         }
     }
 
@@ -67,6 +100,15 @@
         ctx.clearRect(0, 0, canvasW, canvasH)
         arr.forEach((item, index) => {
             item.move()
+            if (Math.abs(item.x - mouseX) < distance && Math.abs(item.y - mouseY) < distance) {
+                ctx.beginPath()
+                ctx.strokeStyle = '#fff'
+                ctx.moveTo(item.x, item.y)
+                ctx.lineTo(mouseX, mouseY)
+                ctx.closePath()
+                ctx.stroke()
+                item.mouse = true
+            }
             for (let i = index + 1; i < arr.length; i++) {
                 if (Math.abs(item.x - arr[i].x) < distance && Math.abs(item.y - arr[i].y) < distance) {
                     ctx.beginPath()
