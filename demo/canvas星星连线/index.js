@@ -6,6 +6,7 @@
     const distance = 50; // 两个小球连线的距离
     let mouseX = 0;
     let mouseY = 0;
+    const pointR = 3;  // 小球的半径
 
     // let canvasW = window.innerWidth;
     // let canvasH = window.innerHeight;
@@ -50,10 +51,10 @@
         }
         move() {
             this.draw()
-            if (this.x <= 0 || this.x >= canvasW) {
+            if (this.x <= this.r / 2 || this.x >= canvasW) {
                 this.xSpeed *= -1;
             }
-            if (this.y <= 0 || this.y >= canvasH) {
+            if (this.y <= this.r / 2 || this.y >= canvasH) {
                 this.ySpeed *= -1;
             }
 
@@ -87,9 +88,9 @@
 
     let arr = []
     for (let i = 0; i < 20; i++) {
-        const x = Math.floor(Math.random() * canvasW);
-        const y = Math.floor(Math.random() * canvasH);
-        const point = new Point(x, y, 3, -1, 1)
+        const x = Math.floor(Math.random() * (canvasW - pointR)) + pointR;
+        const y = Math.floor(Math.random() * (canvasH - pointR)) + pointR;
+        const point = new Point(x, y, pointR, -1, 1)
         arr.push(point)
     }
 
