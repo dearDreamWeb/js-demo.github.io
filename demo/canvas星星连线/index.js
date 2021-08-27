@@ -3,10 +3,14 @@
     const ctx = canvas.getContext('2d')
     let canvasW = canvas.width;
     let canvasH = canvas.height;
-    const distance = 50; // 两个小球连线的距离
+    const distance = 100; // 两个小球连线的距离
     let mouseX = 0;
     let mouseY = 0;
+    let mouseMoveX = 0;
+    let mouseMoveY = 0;
     const pointR = 3;  // 小球的半径
+    const pointCount = 50; // 小球的数量
+    let inScreen = false;  // 鼠标是否在屏幕内
 
     // let canvasW = window.innerWidth;
     // let canvasH = window.innerHeight;
@@ -25,6 +29,16 @@
         const { top, left } = canvas.getBoundingClientRect()
         mouseX = e.clientX - left;
         mouseY = e.clientY - top;
+        mouseMoveX = e.movementX;
+        mouseMoveY = e.movementY;
+    })
+    canvas.addEventListener('mouseenter', (e) => {
+        inScreen = true;
+    })
+    canvas.addEventListener('mouseleave', (e) => {
+        inScreen = false;
+        mouseX = 0;
+        mouseY = 0;
     })
 
     /**
@@ -58,40 +72,40 @@
                 this.ySpeed *= -1;
             }
 
-            this.x += this.xSpeed;
-            this.y += this.ySpeed;
-            // if (this.mouse) {
-            //     if (Math.abs(this.x - mouseX) >= distance && Math.abs(this.y - mouseY) >= distance) {
-            //         const ratex = Math.abs(distance - Math.abs(this.x - mouseX)) / Math.abs(this.xSpeed);
-            //         if (mouseX > this.x) {
-            //             this.x -= this.xSpeed * ratex
-            //         } else {
-            //             this.x += this.xSpeed * ratex
-            //         }
-            //         this.mouse = false
- 
-            //         const rate = Math.abs(distance - Math.abs(this.y - mouseY)) / Math.abs(this.ySpeed);
-            //         if (mouseY > this.Y) {
-            //             this.y += this.ySpeed * rate
-            //         } else {
-            //             this.y -= this.ySpeed * rate
-            //         }
-            //         this.mouse = false
-            //     }
+            if (this.mouse) {
+                if(!inScreen){
+                    this.mouse =false;
+                    return ;
+                }
+                console.log(lineDistance(this.x, this.y, mouseX, mouseY) >= distance)
+                if (lineDistance(this.x, this.y, mouseX, mouseY) >= distance) {
+                    this.mouse = false
+                } else {
+                    this.x += mouseMoveX;
+                    this.y += mouseMoveY;
+                    console.log(this.x,this.y)
+                }
 
-            // } else {
-            //     this.x += this.xSpeed;
-            //     this.y += this.ySpeed;
-            // }
+            } else {
+                this.x += this.xSpeed;
+                this.y += this.ySpeed;
+            }
         }
     }
 
     let arr = []
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < pointCount; i++) {
         const x = Math.floor(Math.random() * (canvasW - pointR)) + pointR;
         const y = Math.floor(Math.random() * (canvasH - pointR)) + pointR;
-        const point = new Point(x, y, pointR, -1, 1)
+        const point = new Point(x, y, pointR, -0.5, 0.5)
         arr.push(point)
+    }
+
+    /**
+     * 通过勾股定理计算距离
+     */
+    function lineDistance(x, y, x1, y1) {
+        return Math.sqrt(Math.pow(Math.abs(x - x1), 2) + Math.pow(Math.abs(y - y1), 2))
     }
 
     /**
@@ -101,9 +115,10 @@
         ctx.clearRect(0, 0, canvasW, canvasH)
         arr.forEach((item, index) => {
             item.move()
-            if (Math.abs(item.x - mouseX) < distance && Math.abs(item.y - mouseY) < distance) {
+            if (lineDistance(item.x, item.y, mouseX, mouseY) < distance && inScreen) {
                 ctx.beginPath()
-                ctx.strokeStyle = '#fff'
+                ctx.strokeStyle = '#eee'
+                ctx.lineWidth = '0.2'
                 ctx.moveTo(item.x, item.y)
                 ctx.lineTo(mouseX, mouseY)
                 ctx.closePath()
@@ -111,9 +126,10 @@
                 item.mouse = true
             }
             for (let i = index + 1; i < arr.length; i++) {
-                if (Math.abs(item.x - arr[i].x) < distance && Math.abs(item.y - arr[i].y) < distance) {
+                if (lineDistance(item.x, item.y, arr[i].x, arr[i].y) < distance) {
                     ctx.beginPath()
-                    ctx.strokeStyle = '#fff'
+                    ctx.strokeStyle = '#eee'
+                    ctx.lineWidth = '0.2'
                     ctx.moveTo(item.x, item.y)
                     ctx.lineTo(arr[i].x, arr[i].y)
                     ctx.closePath()
